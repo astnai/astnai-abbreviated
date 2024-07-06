@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>astnai</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #ffffff;
+        font-family: "Montserrat", sans-serif;
+        overflow: hidden;
+        touch-action: manipulation;
+      }
+      .transform-text {
+        font-size: clamp(2rem, 10vw, 5.5rem);
+        font-weight: 700;
+        color: #000;
+        cursor: pointer;
+        display: inline-block;
+        transition: all 0.95s cubic-bezier(0.34, 1.56, 0.64, 1);
+        position: relative;
+        overflow: hidden;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+      }
+      .compress {
+        transform: scale(0.1, 1) rotate(12deg);
+        opacity: 0;
+        letter-spacing: -0.5em;
+        filter: blur(12px);
+      }
+      .expand {
+        transform: scale(1, 1) rotate(0deg);
+        opacity: 1;
+        letter-spacing: normal;
+        filter: blur(0);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .transform-text {
+          transition: none;
+        }
+        .compress,
+        .expand {
+          transform: none;
+          filter: none;
+        }
+      }
+      @media (max-width: 480px) {
+        .transform-text {
+          font-size: clamp(1.5rem, 8vw, 3rem);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <span class="transform-text" role="button" tabindex="0">agustín arias</span>
+
+    <script>
+      const textElement = document.querySelector(".transform-text");
+
+      function transformText() {
+        if (
+          textElement.classList.contains("compress") ||
+          textElement.classList.contains("expand")
+        )
+          return;
+
+        const isExpanded = textElement.textContent === "agustín arias";
+        textElement.classList.add("compress");
+
+        setTimeout(() => {
+          textElement.textContent = isExpanded ? "astnai" : "agustín arias";
+          textElement.classList.remove("compress");
+          textElement.classList.add("expand");
+
+          setTimeout(() => {
+            textElement.classList.remove("expand");
+          }, 950);
+        }, 475);
+      }
+
+      // Touch event
+      textElement.addEventListener(
+        "touchstart",
+        function (e) {
+          e.preventDefault();
+          transformText();
+        },
+        { passive: false }
+      );
+
+      // Click event for non-touch devices
+      textElement.addEventListener("click", transformText);
+
+      // Keyboard interaction
+      textElement.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          transformText();
+        }
+      });
+    </script>
+  </body>
+</html>
